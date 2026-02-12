@@ -1,0 +1,22 @@
+name: Docker Image CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Build Docker Image
+      run: |
+        docker build -t devops-ara-app .
+
+    - name: Run Docker Container
+      run: |
+        docker rm -f devops-container || true
+        docker run -d -p 8085:80 --name devops-container devops-ara-app
